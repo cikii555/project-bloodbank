@@ -3,7 +3,7 @@ require('Database.php');
 $config = require ('config.php');
 require_once __DIR__ . '/vendor/autoload.php';
 
-//include 'vendor/composer/autoload_psr4.php';
+
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\Key;
 header("Access-Control-Allow-Origin:*");
@@ -16,11 +16,12 @@ $dData = json_decode($eData,true);
 
 $username = $dData['user'];
 $password  = $dData['password'];
+
 $result = "";
 
 if ($username!= "" and $password!=""){
-    echo $username;
-    echo $password;
+
+
 
     $sql = "SELECT * FROM users WHERE username ='$username';";
     $res = $db->query($sql);
@@ -30,6 +31,10 @@ if ($username!= "" and $password!=""){
 
         if($password!= $row['password']){
             $result = "Invalid password!";
+            echo json_encode([
+                'status'=>0,
+                'message'=>$result
+            ]);
         }else {
 
             $payload = [
@@ -55,8 +60,16 @@ if ($username!= "" and $password!=""){
         }
     else {
         $result = "Invalid username!";
+        echo json_encode([
+            'status'=>0,
+            'message'=>$result
+        ]);
     }
 }
 else {
     $result = "";
+    echo json_encode([
+        'status'=>0,
+        'message'=>$result
+    ]);
 }
